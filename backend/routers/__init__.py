@@ -1,1 +1,0 @@
-# SentinelAI API routers
