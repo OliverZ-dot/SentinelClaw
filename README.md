@@ -15,7 +15,7 @@ SentinelClaw 是一个面向网络安全研究与教学的**攻防演示平台**
 
 项目前端采用赛博风格的深色 UI，所有数据实时刷新；后端基于 Scapy 进行底层数据包操作，结合 DeepSeek 大模型实现智能威胁分析与安全报告生成。
 
-> **适用场景**：攻防原理可视化教学、个人安全研究。
+> **适用场景**：Agent攻击、攻防原理可视化、个人安全研究。
 
 ---
 
@@ -167,7 +167,7 @@ SentinelClaw is an **offensive-defensive network security research platform** de
 
 The platform demonstrates a complete "attack → sense → analyze" loop: you can launch ARP attacks, watch the threat dashboard react in near real-time, reconstruct attack chains with AI, and generate structured security reports — all from a single interface.
 
-> **Intended for**: attack-defense principle visualization, and personal security research.
+> **Intended for**: agent attack ,attack-defense principle visualization, and personal security research.
 
 ---
 
