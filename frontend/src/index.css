@@ -1,0 +1,284 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── stat number update flash ────────────────────── */
+@keyframes statUpdate {
+  0%   { transform: scale(1.18); opacity: 0.7; }
+  40%  { transform: scale(1.10); opacity: 1; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
+/* ── Markdown report renderer (outside @layer to beat Tailwind preflight) ── */
+.report-markdown { color: var(--text-dim); line-height: 1.75; font-size: 0.875rem; }
+.report-markdown h1 {
+  font-size: 1.1rem !important; font-weight: 700 !important; color: var(--text) !important;
+  border-bottom: 1px solid rgba(0,229,255,0.2);
+  padding-bottom: 6px; margin: 1.2em 0 0.6em;
+  letter-spacing: 0.04em;
+}
+.report-markdown h2 {
+  font-size: 0.95rem !important; font-weight: 600 !important; color: var(--accent) !important;
+  margin: 1em 0 0.5em; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.report-markdown h3 {
+  font-size: 0.875rem !important; font-weight: 600 !important; color: var(--text) !important;
+  margin: 0.8em 0 0.4em;
+}
+.report-markdown p  { margin: 0.5em 0; }
+.report-markdown ul, .report-markdown ol { padding-left: 1.5em; margin: 0.5em 0; }
+.report-markdown ul { list-style-type: disc; }
+.report-markdown ol { list-style-type: decimal; }
+.report-markdown li { margin: 0.25em 0; display: list-item; }
+.report-markdown strong { color: var(--text) !important; font-weight: 700 !important; }
+.report-markdown em    { color: var(--accent); font-style: normal; }
+.report-markdown code {
+  font-family: "JetBrains Mono", monospace;
+  background: rgba(0,229,255,0.07);
+  border: 1px solid rgba(0,229,255,0.15);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 0.8em;
+  color: var(--accent);
+}
+.report-markdown pre {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(0,229,255,0.15);
+  border-radius: 4px;
+  padding: 12px 14px;
+  overflow-x: auto;
+  margin: 0.8em 0;
+}
+.report-markdown pre code { background: none; border: none; padding: 0; color: var(--text-dim); font-size: 0.8rem; }
+.report-markdown table  { width: 100%; border-collapse: collapse; margin: 0.8em 0; font-size: 0.8rem; }
+.report-markdown th {
+  background: rgba(0,229,255,0.08);
+  border: 1px solid rgba(0,229,255,0.2);
+  padding: 6px 10px; color: var(--accent) !important;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.7rem;
+  font-weight: 600 !important;
+}
+.report-markdown td { border: 1px solid rgba(0,229,255,0.1); padding: 5px 10px; color: var(--text-dim); }
+.report-markdown tr:nth-child(even) td { background: rgba(0,229,255,0.03); }
+.report-markdown blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 12px; margin: 0.8em 0;
+  color: var(--text-faint); font-style: italic;
+}
+.report-markdown hr { border: none; border-top: 1px solid rgba(0,229,255,0.15); margin: 1em 0; }
+.report-markdown a  { color: var(--accent); text-decoration: underline; }
+
+@layer base {
+  :root {
+    --canvas:          #060b18;
+    --surface:         #0c1628;
+    --surface-elevated:#112030;
+    --border:          #1c3050;
+    --accent:          #00e5ff;
+    --accent-pink:     #ff2060;
+    --text:            #cce4ff;
+    --text-dim:        #7aa8cc;
+    --text-faint:      #3d6080;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    @apply antialiased font-mono;
+    background-color: var(--canvas);
+    /* subtle perspective grid */
+    background-image:
+      linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px),
+      linear-gradient(0deg,  rgba(0,229,255,0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    min-height: 100vh;
+    color: var(--text);
+  }
+
+  /* CRT scanlines */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 0, 0, 0.18) 3px,
+      rgba(0, 0, 0, 0.18) 4px
+    );
+  }
+}
+
+@layer components {
+
+  /* ── panels ──────────────────────────────────────── */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px rgba(0,229,255,0.08), 0 4px 28px rgba(0,0,0,0.65);
+  }
+
+  .panel-elevated {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px rgba(0,229,255,0.12), 0 4px 28px rgba(0,0,0,0.65);
+  }
+
+  /* ── corner-bracket accent on cards ─────────────── */
+  .panel-cyber {
+    background: var(--surface);
+    border: 1px solid rgba(0,229,255,0.20);
+    border-radius: 4px;
+    box-shadow:
+      0 0 0 1px rgba(0,229,255,0.06),
+      inset 0 0 30px rgba(0,229,255,0.03),
+      0 4px 28px rgba(0,0,0,0.7);
+    position: relative;
+  }
+  .panel-cyber::before,
+  .panel-cyber::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+  }
+  .panel-cyber::before {
+    top: -1px; left: -1px;
+    border-top: 2px solid var(--accent);
+    border-left: 2px solid var(--accent);
+    border-radius: 2px 0 0 0;
+  }
+  .panel-cyber::after {
+    bottom: -1px; right: -1px;
+    border-bottom: 2px solid var(--accent);
+    border-right: 2px solid var(--accent);
+    border-radius: 0 0 2px 0;
+  }
+
+  /* ── typography ──────────────────────────────────── */
+  .cyber-title {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.6875rem;   /* 11px */
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .section-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.625rem;   /* 10px */
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  /* ── accent line under nav ───────────────────────── */
+  .nav-glow-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent) 30%, rgba(255,32,96,0.7) 70%, transparent);
+    opacity: 0.6;
+  }
+
+  /* ── stat number ─────────────────────────────────── */
+  .stat-number {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: #ffffff;
+    text-shadow: 0 0 12px rgba(0,229,255,0.5);
+  }
+
+  /* ── glowing tag / badge ─────────────────────────── */
+  .badge-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    border: 1px solid rgba(0,229,255,0.5);
+    border-radius: 2px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.625rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-shadow: 0 0 8px var(--accent);
+    box-shadow: 0 0 8px rgba(0,229,255,0.2), inset 0 0 8px rgba(0,229,255,0.05);
+  }
+
+  /* ── input ───────────────────────────────────────── */
+  .cyber-input {
+    background: #06111e;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.8125rem;
+    padding: 6px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .cyber-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px rgba(0,229,255,0.2);
+  }
+  .cyber-input::placeholder {
+    color: var(--text-faint);
+  }
+
+  /* ── button primary ──────────────────────────────── */
+  .btn-cyber {
+    background: transparent;
+    border: 1px solid var(--accent);
+    border-radius: 3px;
+    color: var(--accent);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 6px 18px;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s;
+    text-shadow: 0 0 8px rgba(0,229,255,0.4);
+  }
+  .btn-cyber:hover {
+    background: rgba(0,229,255,0.08);
+    box-shadow: 0 0 14px rgba(0,229,255,0.25);
+  }
+  .btn-cyber:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .btn-cyber-solid {
+    background: rgba(0,229,255,0.12);
+    border: 1px solid rgba(0,229,255,0.5);
+    border-radius: 3px;
+    color: var(--accent);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 6px 18px;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s;
+  }
+  .btn-cyber-solid:hover {
+    background: rgba(0,229,255,0.2);
+    box-shadow: 0 0 16px rgba(0,229,255,0.3);
+  }
+  .btn-cyber-solid:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+}

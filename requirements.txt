@@ -1,0 +1,30 @@
+# 核心框架
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+websockets==12.0
+pydantic==2.7.0
+pydantic-settings==2.2.1
+
+# 网络抓包与解析
+scapy==2.6.0
+pyshark==0.6
+dpkt==1.9.8
+
+# AI / LLM
+openai>=1.40.0,<2.0.0
+langchain==0.2.16
+langchain-openai==0.1.23
+langgraph==0.1.19
+
+# 机器学习
+scikit-learn==1.5.0
+numpy==1.26.4
+pandas==2.2.2
+joblib==1.4.2
+
+# 可视化 / 工具
+python-dotenv==1.0.1
+aiofiles==23.2.1
+python-multipart==0.0.9
+httpx==0.27.0
+duckduckgo-search==6.3.5
